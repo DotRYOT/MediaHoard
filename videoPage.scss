@@ -1,0 +1,27 @@
+@import "./scss/global";
+@import "./scss/videoPlayer";
+
+body {
+  .leftVideoSection {
+    width: 70vw;
+    height: auto;
+
+    .video-wrapper {
+      margin: 1rem;
+      border-radius: .5rem;
+    }
+
+    .videoTitle {
+      margin-left: 1rem;
+    }
+
+    .timeStamp {
+      margin-left: 1rem;
+    }
+  }
+
+  .rightVideoSection {
+    width: 30vw;
+    height: auto;
+  }
+}
