@@ -45,5 +45,5 @@ $title = getYoutubeVideoTitleScrape($video_id);
 $safeTitle = urlencode($title);
 
 // Redirect to the download page with the sanitized title
-// header('Location: ./_downloadedVideo.php/?url=' . $randNumber . '.mp4&title=' . $safeTitle);
+header('Location: ./_downloadedVideo.php/?url=' . $randNumber . '.mp4&title=' . $safeTitle);
 exit();
