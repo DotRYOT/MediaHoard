@@ -1,6 +1,6 @@
 <?php
 require_once './version.php';
-if (!is_dir("./video") || (!file_exists("./video/posts.json")) || (!file_exists("./video/_video.php") || !is_dir("./scripts/temp/videos"))) {
+if (!is_dir("./video") || !file_exists("./video/posts.json") ||!file_exists("./video/_video.php") || !is_dir("./scripts/temp/videos") || !file_exists("./scripts/yt-dlp.exe")) {
   require_once './setup.php';
   echo "Setup complete! Please refresh the page.";
   exit();

@@ -22,3 +22,10 @@ if (!is_dir("./scripts/temp")) {
 if (!is_dir("./scripts/temp/videos")) {
   mkdir("./scripts/temp/videos");
 }
+
+// Check to see if yt-dlp is in the root and
+// move it to the right place
+if (!file_exists("./scripts/yt-dlp.exe")) {
+  copy("./yt-dlp.exe", "./scripts/yt-dlp.exe");
+  unlink("./yt-dlp.exe");
+}

@@ -6,23 +6,23 @@ A easy way to watch your favorite videos with no internet.
 Should only require a program that can run PHP scripts.
 ## Installation
 
-To use it you will need:
-
-- FFmpeg in path | Download : [gyan.dev](https://www.gyan.dev/ffmpeg/builds/)
-or
-
 Windows : 
+
+- FFmpeg in path 
+
 ``` 
 winget install "FFmpeg (Essentials Build)"
 ```
 
-Uses [YT-DLP](https://github.com/yt-dlp/yt-dlp) for the downloader.
-* You could update it just place the exe in the same place as the old one.
+* Uses [YT-DLP](https://github.com/yt-dlp/yt-dlp) for the downloader. Place the exe in the root of the directory.
+
+Go to the index.php page on your server.
 
 
 ## Roadmap
 
-- I don't know right now.
+- Make the filters work.
+- Add the settings page.
 
 ## Authors
 
@@ -31,7 +31,7 @@ Uses [YT-DLP](https://github.com/yt-dlp/yt-dlp) for the downloader.
 
 ## Tech Stack
 
-**Client:** PHP
+**Client:** HTML/PHP
 
 **Server:** Apache
 
