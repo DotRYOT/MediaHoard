@@ -1,6 +1,6 @@
 <?php
 require_once './version.php';
-if (!is_dir("./video") || !file_exists("./video/posts.json") ||!file_exists("./video/_video.php") || !is_dir("./scripts/temp/videos") || !file_exists("./scripts/yt-dlp.exe")) {
+if (!is_dir("./video") || !file_exists("./video/posts.json") || !file_exists("./video/_video.php") || !is_dir("./scripts/temp/videos")) {
   require_once './setup.php';
   echo "Setup complete! Please refresh the page.";
   exit();
@@ -21,7 +21,25 @@ require_once './scripts/_inc.php';
 
 <body>
   <?php
-  displayError();
+  displayMessage();
+
+  // Check to see if the user wants to download yt-dlp automatically
+  if (!file_exists("./scripts/yt-dlp.exe")) {
+    ?>
+    <div class="updateAlert">
+      <ion-icon name="help-outline" title="Update a program"></ion-icon>
+      <h2>Do you want to update/install YT-DLP?</h2>
+      <div class="answer">
+        <a href="./scripts/updates/_updateYTDLP.php">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </a>
+        <a href="./">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </a>
+      </div>
+    </div>
+    <?php
+  }
   ?>
   <nav>
     <div class="navLeft">

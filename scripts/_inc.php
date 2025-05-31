@@ -144,38 +144,119 @@ function generateErrorUrl($errorMessage)
 
   return $fullUrl;
 }
-function generateGetUrl($Message)
+function generateMessageUrl($message, $type = 'message')
 {
-  $encodedUrl = urlencode($Message);
+  switch ($type) {
+    case 'message':
+    default:
+      $urlEncode = urlencode($message);
+      $fullUrl = "?message={$urlEncode}";
+      return $fullUrl;
 
-  $fullUrl = "?status={$encodedUrl}";
+    case 'error':
+      $urlEncode = urlencode($message);
+      $fullUrl = "?error={$urlEncode}";
+      return $fullUrl;
 
-  return $fullUrl;
-}
-function extractNumbersFromUrl($url)
-{
-  $path = parse_url($url, PHP_URL_PATH);
-  preg_match('/\d+/', $path, $matches);
-  return $matches[0] ?? null;
+    case 'success':
+      $urlEncode = urlencode($message);
+      $fullUrl = "?success={$urlEncode}";
+      return $fullUrl;
+
+    case 'warning':
+      $urlEncode = urlencode($message);
+      $fullUrl = "?warning={$urlEncode}";
+      return $fullUrl;
+  }
 }
 function handleError($message)
 {
-  $Error = generateErrorUrl($message);
+  $Error = generateMessageUrl($message, 'error');
   redirectTo("$Error");
   exit;
 }
-function displayError()
+function displayMessage($type = 'message')
 {
-  if (isset($_GET['error'])) {
-    $error = $_GET['error'];
-    echo '
+  switch ($type) {
+    case 'message':
+    default:
+      if (isset($_GET['message'])) {
+        $message = $_GET['message'];
+        echo '
+  <div class="errorHeader">
+    <ion-icon name="help-outline"></ion-icon>
+    <h2>' . $message . '</h2>
+    <a href="./">
+        <ion-icon name="close-circle-outline"></ion-icon>
+    </a>
+  </div>';
+      }
+
+    case 'error':
+      if (isset($_GET['error'])) {
+        $error = $_GET['error'];
+        echo '
   <div class="errorHeader">
     <ion-icon name="help-outline"></ion-icon>
     <h2>' . $error . '</h2>
     <a href="./">
         <ion-icon name="close-circle-outline"></ion-icon>
     </a>
-  </div>
-';
+  </div>';
+      }
+    case 'success':
+      if (isset($_GET['success'])) {
+        $success = $_GET['success'];
+        echo '
+  <div class="successAlert">
+    <ion-icon name="help-outline"></ion-icon>
+    <h2>' . $success . '</h2>
+    <a href="./">
+        <ion-icon name="close-circle-outline"></ion-icon>
+    </a>
+  </div>';
+      }
+    case 'warning':
+      if (isset($_GET['warning'])) {
+        $warning = $_GET['warning'];
+        echo '
+  <div class="warningAlert">
+    <ion-icon name="help-outline"></ion-icon>
+    <h2>' . $warning . '</h2>
+    <a href="./">
+        <ion-icon name="close-circle-outline"></ion-icon>
+    </a>
+  </div>';
+      }
   }
+}
+function downloadFile($fileUrl, $destinationPath)
+{
+  ob_start();
+
+  if (!filter_var($fileUrl, FILTER_VALIDATE_URL)) {
+    return ['success' => false, 'message' => 'Invalid URL'];
+  }
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $fileUrl);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  // Follow redirects
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+  // Timeout after 40 seconds
+  curl_setopt($ch, CURLOPT_TIMEOUT, 40);
+  $fileContents = curl_exec($ch);
+
+  if (curl_errno($ch)) {
+    curl_close($ch);
+    return ['success' => false, 'message' => 'Error fetching file: ' . curl_error($ch)];
+  }
+
+  curl_close($ch);
+
+  if (@file_put_contents($destinationPath, $fileContents) === false) {
+    return ['success' => false, 'message' => 'Failed to write file to destination.'];
+  }
+
+  return ['success' => true, 'message' => 'File downloaded successfully.', 'path' => $destinationPath];
 }

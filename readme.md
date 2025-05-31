@@ -14,10 +14,9 @@ Windows :
 winget install "FFmpeg (Essentials Build)"
 ```
 
-* Uses [YT-DLP](https://github.com/yt-dlp/yt-dlp) for the downloader [direct download](https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe). Place the exe in the root of the directory.
+* Uses [YT-DLP](https://github.com/yt-dlp/yt-dlp) for the downloader, it is installed on startup!
 
 Go to the index.php page on your server.
-
 
 ## Roadmap
 

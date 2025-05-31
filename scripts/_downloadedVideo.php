@@ -80,6 +80,6 @@ if (file_put_contents($json_file, $json_data) === false) {
 }
 
 // Redirect to success page
-$success = generateGetUrl("posted");
+$success = generateMessageUrl("posted", 'success');
 header("Location: ../../$success");
 exit;
