@@ -41,6 +41,13 @@ body {
   font-style: normal;
 }
 
+@mixin blur-black {
+  /* From https://css.glass */
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
 a {
   text-decoration: underline;
   color: var(--link-color);
@@ -333,4 +340,28 @@ input {
       }
     }
   }
+}
+
+#spinner {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-content: stretch;
+  align-content: stretch;
+  -webkit-align-items: center;
+  align-items: center;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  background-color: var(--primary-bg);
+
+  width: 100vw;
+  height: 100vh;
 }

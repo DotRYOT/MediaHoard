@@ -4,9 +4,9 @@
 A easy way to watch your favorite videos with no internet.
 
 Should only require a program that can run PHP scripts.
-## Installation
+## Windows Installation
 
-Windows : 
+Download the zip [HERE](https://github.com/DotRYOT/videoArchiver/archive/refs/heads/main.zip)
 
 - FFmpeg in path 
 

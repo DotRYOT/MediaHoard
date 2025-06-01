@@ -41,6 +41,9 @@ require_once './scripts/_inc.php';
     <?php
   }
   ?>
+  <div id="spinner" style="display: none;">
+    <l-zoomies size="150" stroke="5" bg-opacity="0.1" speed="1.4" color="#ff4500"></l-zoomies>
+  </div>
   <nav>
     <div class="navLeft">
       <h3>Off-Platform Video Player <span><?= $version; ?></span></h3>
@@ -50,19 +53,17 @@ require_once './scripts/_inc.php';
         <form action="./scripts/_downloader.php" method="get">
           <div class="hLine"></div>
           <div id="formSwap">
-            <div id="spinner" style="display: none;">
-              <l-zoomies size="150" stroke="5" bg-opacity="0.1" speed="1.4" color="#ff4500"></l-zoomies>
-            </div>
             <div id="form">
               <input type="text" name="url" placeholder="YouTube URL" required>
-              <button type="submit" onclick="toggleSpinner()">Download</button>
+              <button id="submitButton" type="submit" onclick="toggleSpinner()" style="display: flex;">Download</button>
+              <button id="loadingButton" type="button" name="loading" style="display: none;">Loading...</button>
             </div>
           </div>
           <div class="hLine"></div>
           <button type="button" onclick="togglePageFiltertab()">
             <ion-icon name="filter-outline"></ion-icon>
           </button>
-          <button type="button">
+          <button type="button" onclick="window.location.href='./settings/'">
             <ion-icon name="settings-outline"></ion-icon>
           </button>
           <div class="hLine"></div>
@@ -72,20 +73,95 @@ require_once './scripts/_inc.php';
   </nav>
   <div class="pageFiltertab" style="display: none;">
     <div class="filterTab">
-      <button>All</button>
       <button>Random</button>
       <button>Newest</button>
       <button>Oldest</button>
     </div>
   </div>
   <div class="PostLoadedArea"></div>
-
   <script>
+    let allPosts = [];
+    function createPostCard(post) {
+      if (!post || !post.video_path || !post.title) return '';
+      const decodedTitle = decodeHTMLEntities(post.title);
+      const thumbnailPath = post.thumbnail_path;
+      const videoUID = post.PUID;
+      const date = new Date(post.Time * 1000).toLocaleDateString();
+      return `
+      <div class="post-card">
+        <a href="./video/_video.php?id=${videoUID}&time=${post.Time}&title=${encodeURIComponent(post.title)}&video_path=${encodeURIComponent(post.video_path)}&thumbnail_path=${encodeURIComponent(post.thumbnail_path)}" class="post-link">
+          <img src=".${thumbnailPath}" alt="${decodedTitle} thumbnail" loading="lazy" class="post-thumbnail">
+          <h3 class="post-title">${decodedTitle}</h3>
+        </a>
+        <p class="post-date">Posted: ${date}</p>
+      </div>
+    `;
+    }
+
+    function loadPosts(data) {
+      const container = document.querySelector('.PostLoadedArea');
+      if (!container) return;
+      if (!Array.isArray(data)) {
+        container.innerHTML = `<div class="noPosts">Invalid data format.</div>`;
+        return;
+      }
+      if (data.length === 0) {
+        container.innerHTML = `<div class="noPosts">No posts available.</div>`;
+        return;
+      }
+      allPosts = data;
+      renderPosts(sortByNewest(data));
+    }
+
+    function renderPosts(posts) {
+      const container = document.querySelector('.PostLoadedArea');
+      container.innerHTML = posts.map(post => createPostCard(post)).join('');
+    }
+
+    function sortByNewest(posts) {
+      return [...posts].sort((a, b) => b.Time - a.Time);
+    }
+
+    function sortByOldest(posts) {
+      return [...posts].sort((a, b) => a.Time - b.Time);
+    }
+
+    function sortByRandom(posts) {
+      const shuffled = [...posts];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    function setupFilterButtons() {
+      document.querySelector('.filterTab button:nth-child(1)').addEventListener('click', () => {
+        renderPosts(sortByRandom(allPosts));
+      });
+
+      document.querySelector('.filterTab button:nth-child(2)').addEventListener('click', () => {
+        renderPosts(sortByNewest(allPosts));
+      });
+
+      document.querySelector('.filterTab button:nth-child(3)').addEventListener('click', () => {
+        renderPosts(sortByOldest(allPosts));
+      });
+    }
+
+    function decodeHTMLEntities(text) {
+      const textArea = document.createElement('textarea');
+      textArea.innerHTML = text;
+      return textArea.value;
+    }
+
     function toggleSpinner() {
       const spinner = document.querySelector('#spinner');
-      const form = document.querySelector('#form');
+      const submitButton = document.querySelector('#submitButton');
+      const loadingButton = document.querySelector('#loadingButton');
+      submitButton.style.display = submitButton.style.display === 'none' ? 'flex' : 'none';
+      loadingButton.style.display = loadingButton.style.display === 'none' ? 'flex' : 'none';
       spinner.style.display = spinner.style.display === 'none' ? 'flex' : 'none';
-      form.style.display = form.style.display === 'none' ? 'flex' : 'none';
     }
 
     function togglePageFiltertab() {
@@ -93,53 +169,15 @@ require_once './scripts/_inc.php';
       pageFiltertab.style.display = pageFiltertab.style.display === 'none' ? 'block' : 'none';
     }
 
-    // Helper to decode HTML entities (e.g., &quot; → ")
-    function decodeHTMLEntities(text) {
-      const textArea = document.createElement('textarea');
-      textArea.innerHTML = text;
-      return textArea.value;
-    }
-
-    function createPostCard(post) {
-      if (!post || !post.video_path || !post.title) return '';
-
-      const decodedTitle = decodeHTMLEntities(post.title);
-      const thumbnailPath = post.thumbnail_path;
-      const videoUID = post.PUID;
-      const date = new Date(post.Time * 1000).toLocaleDateString();
-
-      return `
-    <div class="post-card">
-      <a href="./video/_video.php?id=${videoUID}&time=${post.Time}&title=${post.title}&video_path=${post.video_path}&thumbnail_path=${post.thumbnail_path}" class="post-link">
-        <img src=".${thumbnailPath}" alt="${decodedTitle} thumbnail" class="post-thumbnail">
-        <h3 class="post-title">${decodedTitle}</h3>
-      </a>
-      <p class="post-date">Posted: ${date}</p>
-    </div>
-  `;
-    }
-
-    function loadPosts() {
+    function fetchAndLoadPosts() {
       fetch('./video/posts.json')
         .then(response => {
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           return response.json();
         })
         .then(data => {
-          const container = document.querySelector('.PostLoadedArea');
-          if (!container) return;
-
-          if (!Array.isArray(data)) {
-            container.innerHTML = `<div class="noPosts">Invalid data format.</div>`;
-            return;
-          }
-
-          if (data.length === 0) {
-            container.innerHTML = `<div class="noPosts">No posts available.</div>`;
-            return;
-          }
-
-          container.innerHTML = data.map(post => createPostCard(post)).join('');
+          loadPosts(data);
+          setupFilterButtons();
         })
         .catch(error => {
           console.error("Fetch error:", error.message);
@@ -150,7 +188,7 @@ require_once './scripts/_inc.php';
         });
     }
 
-    document.addEventListener('DOMContentLoaded', loadPosts);
+    document.addEventListener('DOMContentLoaded', fetchAndLoadPosts);
   </script>
 
   <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

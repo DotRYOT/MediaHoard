@@ -1,7 +1,10 @@
 @import "./scss/global";
 @import "./scss/videoPlayer";
+@import "./scss/nav";
 
 body {
+  margin-top: 3.5rem;
+
   .leftVideoSection {
     width: 70vw;
     height: auto;

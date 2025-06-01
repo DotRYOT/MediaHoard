@@ -1,5 +1,5 @@
 <?php
-
+require_once '../version.php';
 $videoUID = $_GET['id'];
 $videoTime = $_GET['time'];
 $videoTitle = $_GET['title'];
@@ -13,10 +13,28 @@ $videoPath = $_GET['video_path'];
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video</title>
+  <link rel="shortcut icon" href="../favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="../css/videoPage.min.css">
 </head>
 
 <body>
+  <nav>
+    <div class="navLeft">
+      <h3>Off-Platform Video Player <span><?= $version; ?></span></h3>
+    </div>
+    <div class="navRight">
+      <div class="videoNav">
+        <div class="hLine"></div>
+        <button type="button" onclick="window.location.href='../'">
+          <ion-icon name="home-outline"></ion-icon>
+        </button>
+        <button type="button" onclick="window.location.href='../settings/'">
+          <ion-icon name="settings-outline"></ion-icon>
+        </button>
+        <div class="hLine"></div>
+      </div>
+    </div>
+  </nav>
   <div class="leftVideoSection">
     <div class="video-wrapper">
       <video preload="auto">
@@ -46,7 +64,7 @@ $videoPath = $_GET['video_path'];
     </div>
   </div>
   <div class="rightVideoSection">
-    
+
   </div>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

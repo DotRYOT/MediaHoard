@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const volumeControl = document.querySelector(".volume-control");
   const volumeSlider = document.querySelector(".volume-slider input");
   let previousVolume = parseFloat(localStorage.getItem("previousVolume")) || 1;
+  let hideCursorTimeout;
   let hideControlsTimeout;
 
   // Load saved volume
@@ -82,32 +83,55 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
   }
 
-  // Mouse move -> show controls
+  // Cursor & Controls visibility logic
   const wrapper = document.querySelector(".video-wrapper");
+  const controls = wrapper.querySelector(".controls");
 
-  function showControls() {
-    wrapper.querySelector(".controls").style.opacity = "1";
-    wrapper.querySelector(".controls").style.transform = "translateY(0)";
-    resetHideControlsTimer();
-  }
+  function resetCursorAndControls() {
+    // Show cursor
+    wrapper.classList.add("show-cursor");
 
-  function hideControls() {
-    const controls = wrapper.querySelector(".controls");
-    controls.style.opacity = "0";
-    controls.style.transform = "translateY(10px)";
-  }
+    // Show controls
+    controls.style.opacity = "1";
+    controls.style.transform = "translateY(0)";
 
-  function resetHideControlsTimer() {
+    // Clear timeouts
+    clearTimeout(hideCursorTimeout);
     clearTimeout(hideControlsTimeout);
-    hideControlsTimeout = setTimeout(hideControls, 2000); // 2 seconds
+
+    // Schedule hiding after inactivity
+    hideCursorTimeout = setTimeout(() => {
+      wrapper.classList.remove("show-cursor");
+    }, 2000);
+
+    hideControlsTimeout = setTimeout(() => {
+      controls.style.opacity = "0";
+      controls.style.transform = "translateY(10px)";
+    }, 2000);
   }
 
+  // Mouse move -> show cursor and controls
   wrapper.addEventListener("mousemove", () => {
-    showControls();
+    resetCursorAndControls();
+  });
+
+  wrapper.addEventListener("click", () => {
+    resetCursorAndControls();
   });
 
   wrapper.addEventListener("mouseleave", () => {
-    hideControls();
+    clearTimeout(hideCursorTimeout);
+    clearTimeout(hideControlsTimeout);
+  });
+
+  // Keep controls visible while hovering over them
+  controls.addEventListener("mouseenter", () => {
+    clearTimeout(hideCursorTimeout);
+    clearTimeout(hideControlsTimeout);
+  });
+
+  controls.addEventListener("mouseleave", () => {
+    resetCursorAndControls();
   });
 
   // Fullscreen handling
@@ -135,6 +159,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // Optional: Listen for system fullscreen change events
   document.addEventListener("fullscreenchange", () => {
     if (!document.fullscreenElement) {
+      document.body.classList.remove("fullscreen");
+    }
+  });
+
+  // Double click to toggle fullscreen
+  wrapper.addEventListener("dblclick", () => {
+    if (!document.fullscreenElement) {
+      wrapper.requestFullscreen().catch(console.error);
+      document.body.classList.add("fullscreen");
+    } else {
+      document.exitFullscreen().catch(console.error);
       document.body.classList.remove("fullscreen");
     }
   });
