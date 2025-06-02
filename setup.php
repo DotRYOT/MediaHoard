@@ -39,3 +39,10 @@ if (!file_exists("./.htaccess")) {
 if (!file_exists("./favicon.png")) {
   copy("./scripts/temp/favicon.png", "./favicon.png");
 }
+
+if (isset($_GET['update'])) {
+  if ($_GET['update'] == "true") {
+    header("Location: ./");
+    exit();
+  }
+}

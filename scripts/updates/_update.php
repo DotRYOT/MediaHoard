@@ -75,4 +75,4 @@ runCmd("git reset --hard origin/$branch");
 runCmd("git pull origin $branch");
 
 echo "<p class='success'>✅ Successfully updated to the latest version!</p>";
-echo "<a href='../../' class='button'>🔄 Return to Home</a>";
+echo "<a href='../../setup.php?update=true' class='button'>🔄 Return to Home</a>";
