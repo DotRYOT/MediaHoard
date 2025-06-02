@@ -1,16 +1,23 @@
 <?php
 
+// Make sure the /video directory exists
 if (!is_dir("./video")) {
   mkdir("./video");
 }
 
+// Make sure the /video/posts.json file exists
 if (!file_exists("./video/posts.json")) {
   file_put_contents("./video/posts.json", json_encode([]));
 }
 
-// copy the _videoPage.php to the video directory
+// Copy the _videoPage.php to the video directory
 if (!file_exists("./video/_video.php")) {
   copy("./scripts/_video.php", "./video/_video.php");
+}
+
+// Copy the config.json to the root directory
+if (!file_exists("./config.json")) {
+  copy("./scripts/config.json", "./config.json");
 }
 
 // Make sure the /scripts/temp directory exists

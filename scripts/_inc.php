@@ -260,3 +260,46 @@ function downloadFile($fileUrl, $destinationPath)
 
   return ['success' => true, 'message' => 'File downloaded successfully.', 'path' => $destinationPath];
 }
+function getYtDlpVersion($outputJson = false)
+{
+  $YTDLP_PATH = __DIR__ . "/yt-dlp.exe";
+
+  // Debug: Check if file exists
+  if (!file_exists($YTDLP_PATH)) {
+    $response = [
+      'version' => 'File not found',
+      'binary_path' => $YTDLP_PATH,
+      'success' => false,
+      'error' => 'yt-dlp.exe does not exist at the specified path'
+    ];
+
+    if ($outputJson) {
+      header("Content-Type: application/json");
+      echo json_encode($response);
+      exit;
+    }
+
+    return $response;
+  }
+
+  // Run version command
+  exec("\"$YTDLP_PATH\" --version", $output, $return_var);
+
+  // Build response
+  $response = [
+    'version' => $output[0] ?? 'Failed to get version',
+    'loaded' => ($return_var === 0) ? 'Loaded' : 'Error',
+    'binary_path' => $YTDLP_PATH,
+    'exec_output' => $output,
+    'exec_return_code' => $return_var,
+    'success' => ($return_var === 0)
+  ];
+
+  if ($outputJson) {
+    header("Content-Type: application/json");
+    echo json_encode($response);
+    exit;
+  }
+
+  return $response;
+}

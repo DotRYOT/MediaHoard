@@ -1,3 +1,8 @@
+$color-success: #4caf50;
+$color-accent: #ff4500;
+$color-success-dark: darken($color-success, 10%);
+$color-accent-dark: lighten($color-accent, 5%); // Or darken if preferred
+
 :root {
   --primary-bg: #000000; // Dark background
   --secondary-bg: #2c2c2e; // Slightly lighter background
@@ -361,6 +366,8 @@ input {
   left: 0;
 
   background-color: var(--primary-bg);
+
+  z-index: 1000;
 
   width: 100vw;
   height: 100vh;

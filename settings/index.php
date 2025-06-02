@@ -2,6 +2,10 @@
 require_once '../version.php';
 require_once '../scripts/_inc.php';
 
+$configFile = __DIR__ . '/../config.json';
+$config = json_decode(file_get_contents($configFile), true);
+
+$ytdlpVersion = getYtDlpVersion();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +16,7 @@ require_once '../scripts/_inc.php';
   <title>Settings</title>
   <link rel="shortcut icon" href="./favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="./css/index.min.css">
+  <link rel="shortcut icon" href="../favicon.png" type="image/x-icon">
   <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/zoomies.js"></script>
 </head>
 
@@ -37,15 +42,48 @@ require_once '../scripts/_inc.php';
     </div>
   </nav>
 
-  <div class="settingsUpdateSection">
-    <h3>Update System</h3>
-    <p  class="version">Current Version: <?= $version ?></p>
-    <button type="button" onclick="window.location.href='../scripts/updates/_update.php'">
-      <ion-icon name="cloud-download-outline"></ion-icon>
-      <p>Check for Updates</p>
-    </button>
+  <div class="topSettingsSection">
+    <div class="settingsUpdateSection">
+      <h3>Update System</h3>
+      <p class="version">Current Version: <?= $version; ?></p>
+      <button type="button" onclick="window.location.href='../scripts/updates/_update.php'">
+        <ion-icon name="cloud-download-outline"></ion-icon>
+        <p>Check for Updates</p>
+      </button>
+    </div>
+
+    <div class="settingsUpdateSection">
+      <h3>Update YT-DLP</h3>
+      <p class="version">Current Version: <?= $ytdlpVersion['version']; ?></p>
+      <button type="button" onclick="window.location.href='../scripts/updates/_updateYTDLP.php'">
+        <ion-icon name="cloud-download-outline"></ion-icon>
+        <p>Check for Updates</p>
+      </button>
+    </div>
   </div>
 
+  <div class="VideoSettingsSection">
+    <h3>Video Settings</h3>
+    <form action="../scripts/utility/_videoSettings.php" method="post" class="settingsForm">
+      <div class="settingsRow">
+        <p>Frame Time (in frames)</p>
+        <input type="number" id="frameTime" name="frameTime" value="<?= $config['frameTime'] ?>">
+      </div>
+      <div class="settingsRow">
+        <p>Thumbnail Width</p>
+        <input type="number" id="thumbWidth" name="thumbWidth" value="<?= $config['thumbWidth'] ?>">
+      </div>
+      <div class="settingsRow">
+        <p>Thumbnail Height</p>
+        <input type="number" id="thumbHeight" name="thumbHeight" value="<?= $config['thumbHeight'] ?>">
+      </div>
+      <div class="settingsRow">
+        <p>Video Extension</p>
+        <input type="text" id="videoExtension" name="videoExtension" value="<?= $config['videoExtension'] ?>">
+      </div>
+      <button type="submit">Save</button>
+    </form>
+  </div>
 
   <script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" crossorigin></script>

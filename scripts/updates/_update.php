@@ -49,7 +49,7 @@ echo "<p>Remote Version: <strong>$remoteVersion</strong></p>";
 
 if (version_compare($localVersion, $remoteVersion, '>=')) {
   echo "<p class='success'>🎉 Already up to date. No action required.</p>";
-  echo "<a href='../../index.php' class='button'>🔄 Return to Home</a>";
+  echo "<a href='../../' class='button'>🔄 Return to Home</a>";
   exit(0);
 }
 

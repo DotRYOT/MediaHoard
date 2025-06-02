@@ -1,7 +1,22 @@
 <?php
-session_start();
-
 require "./_inc.php"; // Contains randStringGen, generateGetUrl, etc.
+
+// Load config.json
+$configFile = __DIR__ . '/../config.json';
+if (!file_exists($configFile)) {
+  die("Config file not found: $configFile");
+}
+
+$config = json_decode(file_get_contents($configFile), true);
+if (json_last_error() !== JSON_ERROR_NONE) {
+  die("Invalid JSON in config file.");
+}
+
+// Read config values with defaults
+$frameTime = $config['frameTime'] ?? 20;
+$thumbWidth = $config['thumbWidth'] ?? 1280;
+$thumbHeight = $config['thumbHeight'] ?? 720;
+$videoExtension = $config['videoExtension'] ?? 'mp4';
 
 // Generate unique identifier and timestamp
 $PUID = randStringGen(16, 'numbers');
@@ -17,23 +32,21 @@ $videoTitle = preg_replace(
 // Define paths
 $FileUrl = $_GET['url'];
 $FilePath = "./temp/videos/" . $FileUrl;
-$videoExtension = "mp4";
 $newVideoName = "file_{$PUID}.{$videoExtension}";
 $uploadVideoPath = "../video/{$PUID}/{$newVideoName}";
 
 $frameFileName = "frame_{$PUID}.jpg";
 $frameFilePath = "../video/{$PUID}/{$frameFileName}";
 
-
 if (!is_dir("../video/{$PUID}/")) {
-  mkdir("../video/{$PUID}/");
+  mkdir("../video/{$PUID}/", 0777, true);
 }
 
 // Attempt to move the video file
 $uploadSuccess = false;
 if (rename($FilePath, $uploadVideoPath)) {
   $uploadSuccess = true;
-} else if (copy($FilePath, $uploadVideoPath)) {
+} elseif (copy($FilePath, $uploadVideoPath)) {
   unlink($FilePath);
   $uploadSuccess = true;
 }
@@ -42,13 +55,9 @@ if (!$uploadSuccess) {
   die("Error moving video file to $uploadVideoPath. Check permissions and paths.");
 }
 
-// Define thumbnail resolution
-$thumbWidth = 640;
-$thumbHeight = 360;
-
 // Build the FFmpeg command
 $ffmpegPath = "ffmpeg";
-$thumbnailCommand = "{$ffmpegPath} -ss 20 -i " . escapeshellarg($uploadVideoPath) . " ";
+$thumbnailCommand = "{$ffmpegPath} -ss $frameTime -i " . escapeshellarg($uploadVideoPath) . " ";
 $thumbnailCommand .= "-vf \"scale={$thumbWidth}:{$thumbHeight}:force_original_aspect_ratio=1,pad={$thumbWidth}:{$thumbHeight}:(ow-iw)/2:(oh-ih)/2\" ";
 $thumbnailCommand .= "-vframes 1 " . escapeshellarg($frameFilePath);
 
