@@ -15,23 +15,29 @@ Perfect for curating your own offline video library.
 - FFmpeg in your system PATH
 - Git (optional, for updates)
 
-## Windows Installation
+## 🚀 Installation via Git (Recommended)
 
-1. Download the latest release as ZIP:  
-   [Download ZIP from GitHub](https://github.com/DotRYOT/videoArchiver/archive/refs/heads/main.zip)
+1. **Install Git**:  
+   [Download & Install Git](https://git-scm.com/downloads)
 
-2. Install FFmpeg (if not already installed):
+2. **Open Terminal / Command Prompt / PowerShell** and run:
 
-```
-winget install "FFmpeg (Essentials Build)"
-```
+   ```bash
+     cd path/to/htdocs
+     git clone https://github.com/DotRYOT/videoArchiver.git
+   ```
 
-3. Extract the ZIP into your web root directory (e.g., `htdocs` if using XAMPP).
+3. Install FFmpeg (if not already installed):
+
+   ```bash
+   winget install "FFmpeg (Essentials Build)"
+   ```
 
 4. Open your browser and go to:
-   http://localhost/videoArchiver/index.php
 
-5. The app will automatically install `yt-dlp` on first launch.
+   [http://localhost/videoArchiver/index.php](http://localhost/videoArchiver/index.php)
+
+5. The app will automatically install yt-dlp on first launch.
 
 ## Auto-Updater
 
@@ -57,3 +63,7 @@ The app includes a built-in updater so you won't need to manually re-download it
 ## License
 
 This project is licensed under the [MIT License](https://github.com/DotRYOT/videoArchiver/blob/main/LICENSE).
+
+```
+
+```
