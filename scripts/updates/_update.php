@@ -68,8 +68,8 @@ function runCmd($cmd)
   return implode("\n", $output);
 }
 
-runCmd("git config user.email \"updater@localhost\"");
-runCmd("git config user.name \"Updater\"");
+runCmd("git config --local user.email \"updater@localhost\"");
+runCmd("git config --local user.name \"Updater\"");
 runCmd("git fetch origin");
 runCmd("git reset --hard origin/$branch");
 runCmd("git pull origin $branch");
