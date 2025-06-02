@@ -29,3 +29,13 @@ if (!is_dir("./scripts/temp")) {
 if (!is_dir("./scripts/temp/videos")) {
   mkdir("./scripts/temp/videos");
 }
+
+// Copy the .htaccess file to the root directory
+if (!file_exists("./.htaccess")) {
+  copy("./scripts/temp/.htaccess", "./.htaccess");
+}
+
+// Copy the favicon.png file to the root directory
+if (!file_exists("./favicon.png")) {
+  copy("./scripts/temp/favicon.png", "./favicon.png");
+}

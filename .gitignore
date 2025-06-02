@@ -137,6 +137,12 @@ dist
 
 video
 
-scripts/temp
+scripts/temp/videos
 
 scripts/yt-dlp.exe
+
+config.json
+
+.htaccess
+
+favicon.png
