@@ -15,6 +15,11 @@ if (!is_dir("./scripts/temp/videos")) {
   mkdir("./scripts/temp/videos");
 }
 
+// Make sure the /cache directory exists
+if (!is_dir("./cache")) {
+  mkdir("./cache");
+}
+
 // Make sure the /video/posts.json file exists
 if (!file_exists("./video/posts.json")) {
   file_put_contents("./video/posts.json", json_encode([]));

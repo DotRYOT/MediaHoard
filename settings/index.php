@@ -5,7 +5,17 @@ require_once '../scripts/_inc.php';
 $configFile = __DIR__ . '/../config.json';
 $config = json_decode(file_get_contents($configFile), true);
 
-$ytdlpVersion = getYtDlpVersion();
+// $ytdlpVersion = getYtDlpVersion();
+$ytdlpVersion['version'] = "2024.05.18";
+
+$videojsonFilePath = __DIR__ . "/../video/posts.json";
+$cacheFilePath = __DIR__ . "/../cache/video_count.cache";
+
+try {
+  $totalVideos = countVideosWithCache($videojsonFilePath, $cacheFilePath);
+} catch (Exception $e) {
+  echo "Error: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +68,38 @@ $ytdlpVersion = getYtDlpVersion();
       <button type="button" onclick="window.location.href='../scripts/updates/_updateYTDLP.php'">
         <ion-icon name="cloud-download-outline"></ion-icon>
         <p>Check for Updates</p>
+      </button>
+    </div>
+  </div>
+
+  <div class="topSettingsSection">
+    <div class="settingsUpdateSection">
+      <h3>Clean Up</h3>
+      <p class="version">Empty dir's and temp files</p>
+      <button type="button" onclick="window.location.href='../scripts/utility/_cleanUpTemp.php'">
+        <ion-icon name="trash-outline"></ion-icon>
+        <p>Clean Up</p>
+      </button>
+    </div>
+
+    <div class="settingsUpdateSection">
+      <h3>Delete All Videos</h3>
+      <p class="version">Total Videos: <?= $totalVideos; ?></p>
+      <button type="button" id="deleteAllVideosButtonFirst"
+        onclick="document.getElementById('deleteAllVideosButton').style.display = 'flex'; document.getElementById('deleteAllVideosButtonFirst').style.display = 'none';">
+        <ion-icon name="trash-outline"></ion-icon>
+        <p>Delete All Videos</p>
+      </button>
+      <button type="button" id="deleteAllVideosButton"
+        onclick="document.getElementById('deleteAllVideosButtonFinal').style.display = 'flex'; document.getElementById('deleteAllVideosButton').style.display = 'none';"
+        style="display: none;">
+        <ion-icon name="trash-outline"></ion-icon>
+        <p>Are you sure?</p>
+      </button>
+      <button type="button" class="deleteAllVideosButtonFinal" id="deleteAllVideosButtonFinal" style="display: none;"
+        onclick="window.location.href='../scripts/utility/_deleteAllVideos.php'">
+        <ion-icon name="trash-outline"></ion-icon>
+        <p>Delete All Videos</p>
       </button>
     </div>
   </div>
