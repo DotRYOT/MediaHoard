@@ -5,6 +5,16 @@ if (!is_dir("./video")) {
   mkdir("./video");
 }
 
+// Make sure the /scripts/temp directory exists
+if (!is_dir("./scripts/temp")) {
+  mkdir("./scripts/temp");
+}
+
+// Make sure the /scripts/temp/videos directory exists
+if (!is_dir("./scripts/temp/videos")) {
+  mkdir("./scripts/temp/videos");
+}
+
 // Make sure the /video/posts.json file exists
 if (!file_exists("./video/posts.json")) {
   file_put_contents("./video/posts.json", json_encode([]));
@@ -20,24 +30,15 @@ if (!file_exists("./config.json")) {
   copy("./scripts/config.json", "./config.json");
 }
 
-// Make sure the /scripts/temp directory exists
-if (!is_dir("./scripts/temp")) {
-  mkdir("./scripts/temp");
-}
-
-// Make sure the /scripts/temp/videos directory exists
-if (!is_dir("./scripts/temp/videos")) {
-  mkdir("./scripts/temp/videos");
-}
 
 // Copy the .htaccess file to the root directory
 if (!file_exists("./.htaccess")) {
-  copy("./scripts/temp/.htaccess", "./.htaccess");
+  copy("./scripts/utils/.htaccess", "./.htaccess");
 }
 
 // Copy the favicon.png file to the root directory
 if (!file_exists("./favicon.png")) {
-  copy("./scripts/temp/favicon.png", "./favicon.png");
+  copy("./scripts/utils/favicon.png", "./favicon.png");
 }
 
 if (isset($_GET['update'])) {

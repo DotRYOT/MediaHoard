@@ -11,7 +11,7 @@ Perfect for curating your own offline video library.
 
 ## Requirements
 
-- A server or local environment that can run PHP scripts (e.g., XAMPP, WAMP, LAMP)
+- A server or local environment that can run PHP scripts (e.g., [XAMPP](https://www.apachefriends.org/), WAMP, LAMP)
 - FFmpeg in your system PATH
 - Git (optional, for updates)
 

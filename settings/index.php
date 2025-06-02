@@ -66,19 +66,19 @@ $ytdlpVersion = getYtDlpVersion();
     <h3>Video Settings</h3>
     <form action="../scripts/utility/_videoSettings.php" method="post" class="settingsForm">
       <div class="settingsRow">
-        <p>Frame Time (in frames)</p>
+        <p>Frame Time (in frames) <span>Default: 5</span></p>
         <input type="number" id="frameTime" name="frameTime" value="<?= $config['frameTime'] ?>">
       </div>
       <div class="settingsRow">
-        <p>Thumbnail Width</p>
+        <p>Thumbnail Width <span>Default: 1280</span></p>
         <input type="number" id="thumbWidth" name="thumbWidth" value="<?= $config['thumbWidth'] ?>">
       </div>
       <div class="settingsRow">
-        <p>Thumbnail Height</p>
+        <p>Thumbnail Height <span>Default: 720</span></p>
         <input type="number" id="thumbHeight" name="thumbHeight" value="<?= $config['thumbHeight'] ?>">
       </div>
       <div class="settingsRow">
-        <p>Video Extension</p>
+        <p>Video Extension <span>Default: mp4</span></p>
         <input type="text" id="videoExtension" name="videoExtension" value="<?= $config['videoExtension'] ?>">
       </div>
       <button type="submit">Save</button>
