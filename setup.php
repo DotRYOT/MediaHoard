@@ -33,12 +33,12 @@ if (!file_exists("./config.json")) {
 
 // Copy the .htaccess file to the root directory
 if (!file_exists("./.htaccess")) {
-  copy("./scripts/utils/.htaccess", "./.htaccess");
+  copy("./scripts/utility/.htaccess", "./.htaccess");
 }
 
 // Copy the favicon.png file to the root directory
 if (!file_exists("./favicon.png")) {
-  copy("./scripts/utils/favicon.png", "./favicon.png");
+  copy("./scripts/utility/favicon.png", "./favicon.png");
 }
 
 if (isset($_GET['update'])) {
