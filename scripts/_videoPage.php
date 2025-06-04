@@ -20,7 +20,7 @@ $videoPath = $_GET['video_path'];
 <body>
   <nav>
     <div class="navLeft">
-      <h3>Off-Platform Video Player <span><?= $version; ?></span></h3>
+      <h3>MediaHoard <span><?= $version; ?></span></h3>
     </div>
     <div class="navRight">
       <div class="videoPostForm">
