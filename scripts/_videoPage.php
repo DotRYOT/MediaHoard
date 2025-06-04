@@ -52,7 +52,9 @@ $videoPath = $_GET['video_path'];
           </div>
         </div>
 
-        <div class="progress-bar"></div>
+        <div class="progress-bar">
+          <div class="buffer-bar"></div>
+        </div>
         <button id="fullscreen"><ion-icon name="expand"></ion-icon></button>
       </div>
     </div>
@@ -64,7 +66,81 @@ $videoPath = $_GET['video_path'];
     </div>
   </div>
   <div class="rightVideoSection">
+    <div class="PostLoadedAreaVideoPage"></div>
+    <script>
+      let allPosts = [];
+      function createPostCard(post) {
+        if (!post || !post.video_path || !post.title) return '';
+        const decodedTitle = decodeHTMLEntities(post.title);
+        const thumbnailPath = post.thumbnail_path;
+        const videoUID = post.PUID;
+        const date = new Date(post.Time * 1000).toLocaleDateString();
+        return `
+      <div class="post-card">
+        <a href="../video/_video.php?id=${videoUID}&time=${post.Time}&title=${encodeURIComponent(post.title)}&video_path=${encodeURIComponent(post.video_path)}&thumbnail_path=${encodeURIComponent(post.thumbnail_path)}" class="post-link">
+          <img src="../${thumbnailPath}" alt="${decodedTitle} thumbnail" loading="lazy" class="post-thumbnail">
+          <h3 class="post-title">${decodedTitle}</h3>
+        </a>
+        <p class="post-date">Posted: ${date}</p>
+      </div>
+    `;
+      }
 
+      function renderPosts(posts) {
+        const container = document.querySelector('.PostLoadedAreaVideoPage');
+        container.innerHTML = posts.map(post => createPostCard(post)).join('');
+      }
+
+      function loadPosts(data) {
+        const container = document.querySelector('.PostLoadedAreaVideoPage');
+        if (!container) return;
+        if (!Array.isArray(data)) {
+          container.innerHTML = `<div class="noPosts">Invalid data format.</div>`;
+          return;
+        }
+        if (data.length === 0) {
+          container.innerHTML = `<div class="noPosts">No posts available.</div>`;
+          return;
+        }
+        allPosts = data;
+        renderPosts(sortByRandom(data));
+      }
+
+      function sortByRandom(posts) {
+        const shuffled = [...posts];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+      }
+
+      function decodeHTMLEntities(text) {
+        const textArea = document.createElement('textarea');
+        textArea.innerHTML = text;
+        return textArea.value;
+      }
+
+      function fetchAndLoadPosts() {
+        fetch('../video/posts.json')
+          .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return response.json();
+          })
+          .then(data => {
+            loadPosts(data);
+          })
+          .catch(error => {
+            console.error("Fetch error:", error.message);
+            const container = document.querySelector('.PostLoadedAreaVideoPage');
+            if (container) {
+              container.innerHTML = `<div class="noPosts">Error loading posts. Please try again later.</div>`;
+            }
+          });
+      }
+
+      document.addEventListener('DOMContentLoaded', fetchAndLoadPosts);
+    </script>
   </div>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

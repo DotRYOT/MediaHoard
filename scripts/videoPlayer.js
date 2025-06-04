@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const fullscreenButton = document.getElementById("fullscreen");
   const volumeControl = document.querySelector(".volume-control");
   const volumeSlider = document.querySelector(".volume-slider input");
+  const volumeControlContainer = document.querySelector(".volume-control");
   let previousVolume = parseFloat(localStorage.getItem("previousVolume")) || 1;
   let hideCursorTimeout;
   let hideControlsTimeout;
@@ -26,8 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function togglePlayPause() {
     if (video.paused) {
-      video.play();
-      playButton.innerHTML = '<ion-icon name="pause"></ion-icon>';
+      video
+        .play()
+        .then(() => {
+          playButton.innerHTML = '<ion-icon name="pause"></ion-icon>';
+        })
+        .catch((e) => {
+          console.warn("Playback failed:", e);
+        });
     } else {
       video.pause();
       playButton.innerHTML = '<ion-icon name="play"></ion-icon>';
@@ -47,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Volume controls
-  volumeButton.addEventListener("click", () => {
+  volumeButton.addEventListener("click", (e) => {
     if (video.volume > 0) {
       previousVolume = video.volume;
       localStorage.setItem("previousVolume", previousVolume);
@@ -55,14 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       video.volume = previousVolume;
     }
-    showVolumeSlider();
+    updateVolumeIcon(video.volume);
   });
 
   volumeSlider.addEventListener("input", (e) => {
     const volume = parseFloat(e.target.value);
     video.volume = volume;
     updateVolumeIcon(volume);
-    showVolumeSlider();
   });
 
   function updateVolumeIcon(volume) {
@@ -73,14 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       volumeButton.innerHTML = '<ion-icon name="volume-high"></ion-icon>';
     }
-  }
-
-  function showVolumeSlider() {
-    volumeControl.classList.add("visible");
-    clearTimeout(volumeControl.hideTimeout);
-    volumeControl.hideTimeout = setTimeout(() => {
-      volumeControl.classList.remove("visible");
-    }, 3000);
   }
 
   // Cursor & Controls visibility logic
@@ -110,6 +108,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   }
 
+  function hideControlsAndCursor() {
+    wrapper.classList.remove("show-cursor");
+    controls.style.opacity = "0";
+    controls.style.transform = "translateY(10px)";
+    clearTimeout(hideCursorTimeout);
+    clearTimeout(hideControlsTimeout);
+  }
+
   // Mouse move -> show cursor and controls
   wrapper.addEventListener("mousemove", () => {
     resetCursorAndControls();
@@ -120,8 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   wrapper.addEventListener("mouseleave", () => {
-    clearTimeout(hideCursorTimeout);
-    clearTimeout(hideControlsTimeout);
+    resetCursorAndControls(); // will trigger hide after timeout
   });
 
   // Keep controls visible while hovering over them
@@ -134,6 +139,21 @@ document.addEventListener("DOMContentLoaded", () => {
     resetCursorAndControls();
   });
 
+  // Hide controls when mouse leaves the browser window
+  document.addEventListener("mouseleave", (e) => {
+    if (
+      !document.fullscreenElement ||
+      !document.body.classList.contains("fullscreen")
+    ) {
+      hideControlsAndCursor();
+    }
+  });
+
+  // Also hide on tab/window blur
+  window.addEventListener("blur", () => {
+    hideControlsAndCursor();
+  });
+
   // Fullscreen handling
   fullscreenButton.addEventListener("click", toggleFullscreen);
 
@@ -142,9 +162,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!document.fullscreenElement) {
       elem.requestFullscreen().catch(console.error);
       document.body.classList.add("fullscreen");
+      fullscreenButton.innerHTML = '<ion-icon name="contract"></ion-icon>'; // Exit icon
     } else {
       document.exitFullscreen().catch(console.error);
       document.body.classList.remove("fullscreen");
+      fullscreenButton.innerHTML = '<ion-icon name="expand"></ion-icon>'; // Enter icon
     }
   }
 
@@ -160,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("fullscreenchange", () => {
     if (!document.fullscreenElement) {
       document.body.classList.remove("fullscreen");
+      fullscreenButton.innerHTML = '<ion-icon name="expand"></ion-icon>';
     }
   });
 
@@ -168,9 +191,68 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!document.fullscreenElement) {
       wrapper.requestFullscreen().catch(console.error);
       document.body.classList.add("fullscreen");
+      fullscreenButton.innerHTML = '<ion-icon name="contract"></ion-icon>';
     } else {
       document.exitFullscreen().catch(console.error);
       document.body.classList.remove("fullscreen");
+      fullscreenButton.innerHTML = '<ion-icon name="expand"></ion-icon>';
     }
+  });
+
+  // Volume hover behavior
+  volumeControlContainer.addEventListener("mouseenter", () => {
+    volumeControl.classList.add("visible");
+  });
+
+  volumeControlContainer.addEventListener("mouseleave", () => {
+    setTimeout(() => {
+      if (!volumeSlider.matches(":focus")) {
+        volumeControl.classList.remove("visible");
+      }
+    }, 3000);
+  });
+
+  // Buffer bar
+  function updateBufferBar() {
+    const duration = video.duration;
+    if (isNaN(duration)) return;
+
+    const bufferBar = document.querySelector(".progress-bar .buffer-bar");
+    if (!bufferBar) {
+      console.error("Buffer bar element not found!");
+      return;
+    }
+
+    bufferBar.innerHTML = "";
+
+    const ranges = video.buffered;
+    for (let i = 0; i < ranges.length; i++) {
+      const start = ranges.start(i);
+      const end = ranges.end(i);
+      const percentStart = (start / duration) * 100;
+      const percentEnd = (end / duration) * 100;
+
+      const bufferSegment = document.createElement("div");
+      bufferSegment.style.left = `${percentStart}%`;
+      bufferSegment.style.width = `${percentEnd - percentStart}%`;
+
+      bufferBar.appendChild(bufferSegment);
+    }
+  }
+
+  video.addEventListener("loadedmetadata", updateBufferBar);
+  setInterval(updateBufferBar, 1000); // Update every second
+
+  // Autoplay when enough has buffered
+  video.muted = true;
+
+  video.addEventListener("canplaythrough", () => {
+    if (!video.paused) return;
+    togglePlayPause(); // Uses same logic as user click
+  });
+
+  // Optional: Unmute after play starts
+  video.addEventListener("play", () => {
+    video.muted = false;
   });
 });

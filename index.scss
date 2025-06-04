@@ -149,20 +149,4 @@ body {
   }
 }
 
-@media (max-width: 1024px) {
-  .PostLoadedArea .post-card {
-    flex: 0 0 calc(33.333% - 0.75rem);
-  }
-}
-
-@media (max-width: 768px) {
-  .PostLoadedArea .post-card {
-    flex: 0 0 calc(50% - 0.75rem);
-  }
-}
-
-@media (max-width: 480px) {
-  .PostLoadedArea .post-card {
-    flex: 0 0 100%;
-  }
-}
+@import "./scss/media";

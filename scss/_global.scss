@@ -29,6 +29,8 @@ $color-accent-dark: lighten($color-accent, 5%); // Or darken if preferred
   --bookmark-color: #007eaf;
 
   --overlay-bg: #00000080;
+
+  --accent-color-transparent: #ff440080; // Bright accent color but transparent
 }
 
 * {
