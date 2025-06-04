@@ -1,5 +1,5 @@
 <?php
-require "./_inc.php"; // Contains randStringGen, generateGetUrl, etc.
+require "./_inc.php";
 
 // Load config.json
 $configFile = __DIR__ . '/../config.json';

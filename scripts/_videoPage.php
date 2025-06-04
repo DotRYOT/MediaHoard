@@ -4,7 +4,6 @@ $videoUID = $_GET['id'];
 $videoTime = $_GET['time'];
 $videoTitle = $_GET['title'];
 $videoPath = $_GET['video_path'];
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
