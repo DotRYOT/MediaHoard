@@ -47,8 +47,9 @@ The app includes a built-in updater so you won't need to manually re-download it
 
 - Setup and basic functionality (complete)
 - Fix filters (complete)
-- Finish settings page (in progress)
-- Add ability to add your own videos (waiting)
+- Finish settings page (complete)
+- Add ability to add your own videos (complete)
+- Add images tab and functionality (waiting)
 
 ## Authors
 
