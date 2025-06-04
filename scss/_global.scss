@@ -93,7 +93,13 @@ input {
 .hLine {
   height: 90%;
   width: 1px;
-  border-radius: .25rem;
+
+  background-color: var(--accent-color);
+}
+
+.vLine {
+  height: 1px;
+  width: 90%;
 
   background-color: var(--accent-color);
 }
@@ -369,7 +375,7 @@ input {
 
   background-color: var(--primary-bg);
 
-  z-index: 1000;
+  z-index: 1001;
 
   width: 100vw;
   height: 100vh;

@@ -39,12 +39,12 @@ try {
       <h3>Off-Platform Video Player <span><?= $version; ?></span></h3>
     </div>
     <div class="navRight">
-      <div class="videoNav">
+      <div class="videoPostForm">
         <div class="hLine"></div>
         <button type="button" onclick="window.location.href='../'">
           <ion-icon name="home-outline"></ion-icon>
         </button>
-        <button type="button" onclick="window.location.href='./'">
+        <button type="button" onclick="window.location.href='../settings/'">
           <ion-icon name="settings-outline"></ion-icon>
         </button>
         <div class="hLine"></div>

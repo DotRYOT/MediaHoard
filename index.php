@@ -50,27 +50,45 @@ require_once './scripts/_inc.php';
     </div>
     <div class="navRight">
       <div class="videoPostForm">
-        <form action="./scripts/_downloader.php" method="get">
-          <div class="hLine"></div>
-          <div id="formSwap">
-            <div id="form">
-              <input type="text" name="url" placeholder="YouTube URL" required>
-              <button id="submitButton" type="submit" onclick="toggleSpinner()" style="display: flex;">Download</button>
-              <button id="loadingButton" type="button" name="loading" style="display: none;">Loading...</button>
-            </div>
-          </div>
-          <div class="hLine"></div>
-          <button type="button" onclick="togglePageFiltertab()">
-            <ion-icon name="filter-outline"></ion-icon>
-          </button>
-          <button type="button" onclick="window.location.href='./settings/'">
-            <ion-icon name="settings-outline"></ion-icon>
-          </button>
-          <div class="hLine"></div>
-        </form>
+        <div class="hLine"></div>
+        <button type="button" name="uploadMenu" onclick="toggleUploadtab()">
+          <ion-icon name="cloud-upload-outline"></ion-icon>
+          <p>Upload</p>
+        </button>
+        <button type="button" onclick="togglePageFiltertab()">
+          <ion-icon name="filter-outline"></ion-icon>
+        </button>
+        <button type="button" onclick="window.location.href='./settings/'">
+          <ion-icon name="settings-outline"></ion-icon>
+        </button>
+        <div class="hLine"></div>
       </div>
     </div>
   </nav>
+  <div class="uploadMenu" id="uploadMenu" style="display: none;">
+    <div class="uploadContainer">
+      <div class="topUploadTitle">
+        <h3>Choose a option</h3>
+        <button type="button" onclick="toggleUploadtab()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+      <form action="./scripts/_downloader.php" method="get">
+        <input type="text" name="url" placeholder="YouTube URL" required>
+        <button id="submitButton" type="submit" onclick="toggleSpinner()" style="display: flex;">Download</button>
+        <button id="loadingButton" type="button" name="loading" style="display: none;">Loading...</button>
+      </form>
+      <div class="vLine"></div>
+      <form action="./scripts/_uploader.php" method="post" enctype="multipart/form-data">
+        <button type="button" name="uploadFile" onclick="document.getElementById('fileUpload').click();">
+          <ion-icon name="cloud-upload-outline"></ion-icon>
+          <p>Upload Videos</p>
+        </button>
+        <input type="file" name="videos" id="fileUpload" accept="video/*" style="display: none;" required>
+        <button type="submit" name="upload" style="display: flex;" onclick="toggleSpinner()">Upload</button>
+      </form>
+    </div>
+  </div>
   <div class="pageFiltertab" style="display: none;">
     <div class="filterTab">
       <button>Random</button>
@@ -167,6 +185,11 @@ require_once './scripts/_inc.php';
     function togglePageFiltertab() {
       const pageFiltertab = document.querySelector('.pageFiltertab');
       pageFiltertab.style.display = pageFiltertab.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleUploadtab() {
+      const uploadMenu = document.querySelector('.uploadMenu');
+      uploadMenu.style.display = uploadMenu.style.display === 'none' ? 'flex' : 'none';
     }
 
     function fetchAndLoadPosts() {

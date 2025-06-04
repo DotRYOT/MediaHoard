@@ -44,6 +44,7 @@ body {
       }
 
       p.version {
+        font-size: .75rem;
         margin: 1rem 0;
         color: var(--placeholder-color);
       }
@@ -138,6 +139,10 @@ body {
           margin: 0;
           font-weight: 500;
           color: var(--text-color);
+
+          span {
+            font-size: .75rem;
+          }
         }
 
         input {

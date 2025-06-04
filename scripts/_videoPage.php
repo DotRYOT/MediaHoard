@@ -23,7 +23,7 @@ $videoPath = $_GET['video_path'];
       <h3>Off-Platform Video Player <span><?= $version; ?></span></h3>
     </div>
     <div class="navRight">
-      <div class="videoNav">
+      <div class="videoPostForm">
         <div class="hLine"></div>
         <button type="button" onclick="window.location.href='../'">
           <ion-icon name="home-outline"></ion-icon>
