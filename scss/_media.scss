@@ -81,3 +81,34 @@
     flex: 0 0 100%;
   }
 }
+
+@media screen and (min-width: 600px) {
+  .ImageGrid {
+    grid-template-columns: repeat(2, 1fr); // Two columns
+  }
+
+  .image-thumbnail {
+    height: 220px;
+  }
+
+  .image-title,
+  .image-meta {
+    font-size: 0.9rem;
+  }
+}
+
+// Desktop
+@media screen and (min-width: 900px) {
+  .ImageGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .image-thumbnail {
+    height: 250px;
+  }
+
+  .image-title,
+  .image-meta {
+    font-size: 1rem;
+  }
+}
