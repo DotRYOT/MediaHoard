@@ -1,0 +1,16 @@
+@import "./scss/global";
+@import "./scss/videoPlayer";
+@import "./scss/nav";
+
+body {
+  width: 100%;
+  height: 100%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+@import "./scss/media";

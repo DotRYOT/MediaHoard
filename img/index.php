@@ -1,11 +1,10 @@
 <?php
-require_once './version.php';
-if (!is_dir("./video") || !file_exists("./video/posts.json") || !file_exists("./video/_video.php") || !is_dir("./scripts/temp/videos")) {
-  require_once './setup.php';
-  echo "Setup complete! Please refresh the page.";
+require_once '../version.php';
+if (!is_dir("./imageFiles") || !file_exists("./imageFiles/images.json") || !file_exists("./imageFiles/_img.php")) {
+  header("Location: ../setup.php?update=true");
   exit();
 }
-require_once './scripts/_inc.php';
+require_once '../scripts/_inc.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,32 +13,14 @@ require_once './scripts/_inc.php';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
-  <link rel="shortcut icon" href="./favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="./css/index.min.css">
+  <link rel="shortcut icon" href="../favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="../css/index.min.css">
   <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/zoomies.js"></script>
 </head>
 
 <body>
   <?php
   displayMessage();
-
-  // Check to see if the user wants to download yt-dlp automatically
-  if (!file_exists("./scripts/yt-dlp.exe")) {
-    ?>
-    <div class="updateAlert">
-      <ion-icon name="help-outline" title="Update a program"></ion-icon>
-      <h2>Do you want to update/install YT-DLP?</h2>
-      <div class="answer">
-        <a href="./scripts/updates/_updateYTDLP.php">
-          <ion-icon name="checkmark-outline"></ion-icon>
-        </a>
-        <a href="./">
-          <ion-icon name="close-circle-outline"></ion-icon>
-        </a>
-      </div>
-    </div>
-    <?php
-  }
   ?>
   <div id="spinner" style="display: none;">
     <l-zoomies size="150" stroke="5" bg-opacity="0.1" speed="1.4" color="#ff4500"></l-zoomies>
@@ -50,13 +31,13 @@ require_once './scripts/_inc.php';
     </div>
     <div class="navRight">
       <div class="videoPostForm">
-        <h3>Videos</h3>
+        <h3>Images</h3>
         <button type="button" name="uploadMenu" onclick="toggleUploadtab()">
           <ion-icon name="cloud-upload-outline"></ion-icon>
           <p>Upload</p>
         </button>
-        <button type="button" name="imagesPage" onclick="window.location.href='./img/'">
-          <ion-icon name="image-outline"></ion-icon>
+        <button type="button" name="videoPage" onclick="window.location.href='../'">
+          <ion-icon name="videocam-outline"></ion-icon>
         </button>
         <button type="button" onclick="togglePageFiltertab()">
           <ion-icon name="filter-outline"></ion-icon>
@@ -75,22 +56,17 @@ require_once './scripts/_inc.php';
           <ion-icon name="close-outline"></ion-icon>
         </button>
       </div>
-      <form action="./scripts/_downloader.php" id="webVideoUpload" method="get">
-        <input type="text" name="url" placeholder="YouTube URL" required>
-        <button id="submitButton" type="submit" onclick="toggleSpinner()" style="display: flex;">Download</button>
-        <button id="loadingButton" type="button" name="loading" style="display: none;">Loading...</button>
-      </form>
-      <div class="vLine"></div>
-      <form action="./scripts/_uploader.php" id="localVideoUpload" method="post" enctype="multipart/form-data">
-        <div class="videoUpload">
-          <button type="button" name="uploadFile" onclick="document.getElementById('fileUpload').click();">
+      <form id="localImageUpload" method="post" enctype="multipart/form-data">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" onclick="document.getElementById('fileUpload').click();">
             <ion-icon name="cloud-upload-outline"></ion-icon>
-            <p>Upload Video</p>
+            <p>Upload Images</p>
           </button>
-          <span id="fileNameDisplay" style="font-size: 14px; color: #888;"></span>
+          <span id="fileNameDisplay" style="font-size: 14px; color: #888;">No file selected</span>
+          <div id="status"></div>
         </div>
-        <input type="file" name="videos" id="fileUpload" accept="video/*" style="display: none;" required>
-        <button type="submit" name="upload" style="display: flex;" onclick="toggleSpinner()">Upload</button>
+        <input type="file" name="images[]" id="fileUpload" accept="image/*" multiple required style="display: none;">
+        <button type="submit" name="upload">Upload</button>
       </form>
     </div>
   </div>
@@ -103,31 +79,39 @@ require_once './scripts/_inc.php';
   </div>
   <div class="PostLoadedArea"></div>
   <script>
-    document.getElementById("fileUpload").addEventListener("change", function () {
-      const fileInput = this;
-      const fileNameDisplay = document.getElementById("fileNameDisplay");
+    document.getElementById("localImageUpload").addEventListener("submit", function (e) {
+      e.preventDefault();
 
-      if (fileInput.files.length > 0) {
-        fileNameDisplay.textContent = fileInput.files[0].name;
-      } else {
-        fileNameDisplay.textContent = "";
-      }
+      const formData = new FormData(this);
+
+      fetch('../scripts/_imgUploader.php', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("status").innerText = data.message;
+          fetchAndLoadPosts();
+          document.getElementById("fileUpload").value = "";
+          document.getElementById("fileNameDisplay").textContent = "No file selected";
+
+          console.log("Uploaded files:", data.files);
+        })
+        .catch(err => {
+          document.getElementById("status").innerText = "Upload failed.";
+          console.error(err);
+        });
     });
 
     let allPosts = [];
     function createPostCard(post) {
-      if (!post || !post.video_path || !post.title) return '';
-      const decodedTitle = decodeHTMLEntities(post.title);
-      const thumbnailPath = post.thumbnail_path;
-      const videoUID = post.PUID;
-      const date = new Date(post.Time * 1000).toLocaleDateString();
+      const PUID = post.PUID;
+      const image_path = post.image_path;
       return `
       <div class="post-card">
-        <a href="./video/_video.php?id=${videoUID}&time=${post.Time}&title=${encodeURIComponent(post.title)}&video_path=${encodeURIComponent(post.video_path)}&thumbnail_path=${encodeURIComponent(post.thumbnail_path)}" class="post-link">
-          <img src=".${thumbnailPath}" alt="${decodedTitle} thumbnail" loading="lazy" class="post-thumbnail">
-          <h3 class="post-title">${decodedTitle}</h3>
+        <a href="./imageFiles/_img.php?puid=${PUID}&filePath=${image_path}" class="post-link">
+          <img src="..${image_path}" alt="thumbnail" loading="lazy" class="post-thumbnail">
         </a>
-        <p class="post-date">Posted: ${date}</p>
       </div>
     `;
     }
@@ -209,7 +193,7 @@ require_once './scripts/_inc.php';
     }
 
     function fetchAndLoadPosts() {
-      fetch('./video/posts.json')
+      fetch('./imageFiles/images.json')
         .then(response => {
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           return response.json();
