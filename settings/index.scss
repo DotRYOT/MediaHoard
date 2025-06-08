@@ -49,14 +49,6 @@ body {
         color: var(--placeholder-color);
       }
 
-      .deleteAllVideosButtonFinal {
-        background-color: var(--warning-color);
-
-        &:hover {
-          background-color: var(--error-color);
-        }
-      }
-
       button {
         display: flex;
         align-items: center;

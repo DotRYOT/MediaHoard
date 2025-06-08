@@ -247,6 +247,12 @@ body {
           font-size: 1.5rem;
         }
       }
+
+      .videoUpload {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
     }
   }
 }

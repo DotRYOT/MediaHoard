@@ -54,19 +54,63 @@ $videoPath = $_GET['video_path'];
         <div class="progress-bar">
           <div class="buffer-bar"></div>
         </div>
-        <button id="fullscreen"><ion-icon name="expand"></ion-icon></button>
+        <button id="fullscreen">
+          <ion-icon name="expand"></ion-icon>
+        </button>
       </div>
     </div>
-    <div class="videoTitle">
-      <?= $videoTitle; ?>
+    <div class="belowVideo">
+      <div class="videoContent">
+        <div class="videoTitle">
+          <?= $videoTitle; ?>
+        </div>
+        <div class="timeStamp">
+          <?= date('Y-m-d H:i:s', $videoTime); ?>
+        </div>
+      </div>
+      <div class="videoSettings">
+        <button type="button" name="settings" onclick="toggleSettingsTab()">
+          <ion-icon name="settings-outline"></ion-icon>
+        </button>
+      </div>
     </div>
-    <div class="timeStamp">
-      <?= date('Y-m-d H:i:s', $videoTime); ?>
+  </div>
+  <div class="settingsPopup" id="settingsPopup" style="display: none;">
+    <div class="container">
+      <div class="VideoSettings">
+        <h3>Video Settings</h3>
+      </div>
+      <div class="deleteVideoContainer">
+        <p>
+          <strong>Delete Video</strong>
+        </p>
+        <button type="button" name="Delete Video" id="DeleteVideoStageOne" style="display: flex;"
+          onclick="document.getElementById('DeleteVideoStageTwo').style.display = 'flex'; document.getElementById('DeleteVideoStageOne').style.display = 'none';">
+          <ion-icon name="trash-outline"></ion-icon>
+          <p>Delete Video</p>
+        </button>
+        <button type="button" name="Delete Video" id="DeleteVideoStageTwo" style="display: none;"
+          onclick="document.getElementById('DeleteVideoStageFinal').style.display = 'flex'; document.getElementById('DeleteVideoStageTwo').style.display = 'none';">
+          <ion-icon name="trash-outline"></ion-icon>
+          <p>Are you sure?</p>
+        </button>
+        <button type="button" name="Delete Video" class="deleteAllVideosButtonFinal" id="DeleteVideoStageFinal"
+          style="display: none;"
+          onclick="window.location.href='../scripts/utility/_deleteVideo.php?puid=<?= $videoUID; ?>'">
+          <ion-icon name="trash-outline"></ion-icon>
+          <p>Delete Video!</p>
+        </button>
+      </div>
     </div>
   </div>
   <div class="rightVideoSection">
     <div class="PostLoadedAreaVideoPage"></div>
     <script>
+      function toggleSettingsTab() {
+        const settingsPopup = document.querySelector('.settingsPopup');
+        settingsPopup.style.display = settingsPopup.style.display === 'none' ? 'flex' : 'none';
+      }
+
       let allPosts = [];
       function createPostCard(post) {
         if (!post || !post.video_path || !post.title) return '';

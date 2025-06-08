@@ -68,22 +68,25 @@ require_once './scripts/_inc.php';
   <div class="uploadMenu" id="uploadMenu" style="display: none;">
     <div class="uploadContainer">
       <div class="topUploadTitle">
-        <h3>Choose a option</h3>
+        <h3>Choose an option</h3>
         <button type="button" onclick="toggleUploadtab()">
           <ion-icon name="close-outline"></ion-icon>
         </button>
       </div>
-      <form action="./scripts/_downloader.php" method="get">
+      <form action="./scripts/_downloader.php" id="webVideoUpload" method="get">
         <input type="text" name="url" placeholder="YouTube URL" required>
         <button id="submitButton" type="submit" onclick="toggleSpinner()" style="display: flex;">Download</button>
         <button id="loadingButton" type="button" name="loading" style="display: none;">Loading...</button>
       </form>
       <div class="vLine"></div>
-      <form action="./scripts/_uploader.php" method="post" enctype="multipart/form-data">
-        <button type="button" name="uploadFile" onclick="document.getElementById('fileUpload').click();">
-          <ion-icon name="cloud-upload-outline"></ion-icon>
-          <p>Upload Videos</p>
-        </button>
+      <form action="./scripts/_uploader.php" id="localVideoUpload" method="post" enctype="multipart/form-data">
+        <div class="videoUpload">
+          <button type="button" name="uploadFile" onclick="document.getElementById('fileUpload').click();">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            <p>Upload Video</p>
+          </button>
+          <span id="fileNameDisplay" style="font-size: 14px; color: #888;"></span>
+        </div>
         <input type="file" name="videos" id="fileUpload" accept="video/*" style="display: none;" required>
         <button type="submit" name="upload" style="display: flex;" onclick="toggleSpinner()">Upload</button>
       </form>
@@ -98,6 +101,17 @@ require_once './scripts/_inc.php';
   </div>
   <div class="PostLoadedArea"></div>
   <script>
+    document.getElementById("fileUpload").addEventListener("change", function () {
+      const fileInput = this;
+      const fileNameDisplay = document.getElementById("fileNameDisplay");
+
+      if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = fileInput.files[0].name;
+      } else {
+        fileNameDisplay.textContent = "";
+      }
+    });
+
     let allPosts = [];
     function createPostCard(post) {
       if (!post || !post.video_path || !post.title) return '';

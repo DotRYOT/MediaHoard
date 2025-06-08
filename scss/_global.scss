@@ -380,3 +380,11 @@ input {
   width: 100vw;
   height: 100vh;
 }
+
+.deleteAllVideosButtonFinal {
+  background-color: var(--warning-color);
+
+  &:hover {
+    background-color: var(--error-color);
+  }
+}
