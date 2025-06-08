@@ -14,7 +14,7 @@ require_once '../scripts/_inc.php';
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
   <link rel="shortcut icon" href="../favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="../css/index.min.css">
+  <link rel="stylesheet" href="../css/imagePage.min.css">
   <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/zoomies.js"></script>
 </head>
 
@@ -77,7 +77,7 @@ require_once '../scripts/_inc.php';
       <button>Oldest</button>
     </div>
   </div>
-  <div class="PostLoadedArea"></div>
+  <div class="ImageGrid"></div>
   <script>
     document.getElementById("localImageUpload").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -108,16 +108,18 @@ require_once '../scripts/_inc.php';
       const PUID = post.PUID;
       const image_path = post.image_path;
       return `
-      <div class="post-card">
-        <a href="./imageFiles/_img.php?puid=${PUID}&filePath=${image_path}" class="post-link">
-          <img src="..${image_path}" alt="thumbnail" loading="lazy" class="post-thumbnail">
+      <div class="image-card">
+        <a href="./imageFiles/_img.php?puid=${PUID}&filePath=${image_path}" class="image-link">
+          <img src="..${image_path}" alt="thumbnail" loading="lazy" class="image-thumbnail">
+          <div class="image-title">View Image</div>
+          <div class="image-meta">${new Date(post.Time * 1000).toLocaleDateString()}</div>
         </a>
       </div>
     `;
     }
 
     function loadPosts(data) {
-      const container = document.querySelector('.PostLoadedArea');
+      const container = document.querySelector('.ImageGrid');
       if (!container) return;
       if (!Array.isArray(data)) {
         container.innerHTML = `<div class="noPosts">Invalid data format.</div>`;
@@ -132,7 +134,7 @@ require_once '../scripts/_inc.php';
     }
 
     function renderPosts(posts) {
-      const container = document.querySelector('.PostLoadedArea');
+      const container = document.querySelector('.ImageGrid');
       container.innerHTML = posts.map(post => createPostCard(post)).join('');
     }
 
@@ -204,7 +206,7 @@ require_once '../scripts/_inc.php';
         })
         .catch(error => {
           console.error("Fetch error:", error.message);
-          const container = document.querySelector('.PostLoadedArea');
+          const container = document.querySelector('.ImageGrid');
           if (container) {
             container.innerHTML = `<div class="noPosts">Error loading posts. Please try again later.</div>`;
           }

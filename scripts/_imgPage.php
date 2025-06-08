@@ -11,8 +11,8 @@ $ImageFilePath = $_GET['filePath'];
   <link rel="stylesheet" href="../../css/imagePage.min.css">
 </head>
 
-<body>
-  <img src="../..<?= $ImageFilePath; ?>" alt="">
+<body class="imageViewerBody">
+  <img class="imageViewer" src="../..<?= $ImageFilePath; ?>" alt="">
 </body>
 
 </html>
