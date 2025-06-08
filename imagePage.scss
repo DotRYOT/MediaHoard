@@ -15,84 +15,118 @@
 
 .ImageGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: 1fr; // Default: mobile layout (single column)
   gap: 1rem;
   padding: 1rem;
   max-width: 1200px;
   margin: 0 auto;
   margin-top: 3.5rem;
+}
 
-  .image-card {
-    background-color: var(--secondary-bg);
-    border-radius: 0.6rem;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
+.image-card {
+  background-color: var(--secondary-bg);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      border-color: var(--hover-border-color);
-    }
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border-color: var(--hover-border-color);
+  }
+}
 
-    .image-link {
-      display: block;
-      position: relative;
+.image-thumbnail {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 0.6rem 0.6rem 0 0;
+  transition: opacity 0.3s ease;
 
-      img.image-thumbnail {
-        width: 100%;
-        height: 250px; // Fixed height for consistent layout
-        object-fit: cover;
-        border-radius: 0.6rem 0.6rem 0 0;
-        display: block;
-        transition: opacity 0.3s ease;
+  &:hover {
+    opacity: 0.9;
+  }
+}
 
-        &:hover {
-          opacity: 0.9;
-        }
-      }
+.image-link {
+  display: block;
+  position: relative;
+  text-decoration: none;
+}
 
-      .image-title {
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        color: var(--link-color);
-        text-decoration: none;
-        font-weight: 500;
+.image-title {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 500;
 
-        &:hover {
-          color: var(--accent-color);
-          text-decoration: underline;
-        }
-
-        &::before {
-          content: '\f06e'; // Font Awesome external link icon
-          font-family: 'Font Awesome 5 Free';
-          margin-right: 0.5rem;
-        }
-      }
-
-      .image-meta {
-        padding: 0 1rem 1rem;
-        font-size: 0.85rem;
-        color: var(--placeholder-color);
-
-        &::before {
-          content: '\f073'; // Font Awesome calendar icon
-          font-family: 'Font Awesome 5 Free';
-          margin-right: 0.5rem;
-        }
-      }
-    }
+  &:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
   }
 
-  .no-images {
-    grid-column: 1 / -1;
-    text-align: center;
-    color: var(--placeholder-color);
-    font-size: 1.2rem;
-    margin: 3rem 0;
+  &::before {
+    content: '\f06e'; // Font Awesome external link icon
+    font-family: 'Font Awesome 5 Free';
+    margin-right: 0.5rem;
+  }
+}
+
+.image-meta {
+  padding: 0 1rem 1rem;
+  font-size: 0.85rem;
+  color: var(--placeholder-color);
+
+  &::before {
+    content: '\f073'; // Font Awesome calendar icon
+    font-family: 'Font Awesome 5 Free';
+    margin-right: 0.5rem;
+  }
+}
+
+.no-images {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--placeholder-color);
+  font-size: 1.2rem;
+  margin: 3rem 0;
+}
+
+// === MEDIA QUERIES (Mobile-First) ===
+
+// Tablets (Portrait)
+@media screen and (min-width: 600px) {
+  .ImageGrid {
+    grid-template-columns: repeat(2, 1fr); // Two columns
+  }
+
+  .image-thumbnail {
+    height: 220px;
+  }
+
+  .image-title,
+  .image-meta {
+    font-size: 0.9rem;
+  }
+}
+
+// Desktop
+@media screen and (min-width: 900px) {
+  .ImageGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .image-thumbnail {
+    height: 250px;
+  }
+
+  .image-title,
+  .image-meta {
+    font-size: 1rem;
   }
 }
 

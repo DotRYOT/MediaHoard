@@ -111,8 +111,6 @@ require_once '../scripts/_inc.php';
       <div class="image-card">
         <a href="./imageFiles/_img.php?puid=${PUID}&filePath=${image_path}" class="image-link">
           <img src="..${image_path}" alt="thumbnail" loading="lazy" class="image-thumbnail">
-          <div class="image-title">View Image</div>
-          <div class="image-meta">${new Date(post.Time * 1000).toLocaleDateString()}</div>
         </a>
       </div>
     `;
