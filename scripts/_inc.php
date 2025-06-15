@@ -118,7 +118,7 @@ function redirectTo($url)
   $redirecturl = $protocol . $domain . $url;
 
   if ($domain == "localhost") {
-    $redirecturl = $protocol . "localhost/videoArchiver/" . $url;
+    $redirecturl = $protocol . "localhost/MediaHoard/" . $url;
   }
 
   header("Location: $redirecturl");

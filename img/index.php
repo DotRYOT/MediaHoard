@@ -12,7 +12,7 @@ require_once '../scripts/_inc.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
+  <title>Home - Images</title>
   <link rel="shortcut icon" href="../favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="../css/imagePage.min.css">
   <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/zoomies.js"></script>
@@ -42,7 +42,7 @@ require_once '../scripts/_inc.php';
         <button type="button" onclick="togglePageFiltertab()">
           <ion-icon name="filter-outline"></ion-icon>
         </button>
-        <button type="button" onclick="window.location.href='./settings/'">
+        <button type="button" onclick="window.location.href='../settings/'">
           <ion-icon name="settings-outline"></ion-icon>
         </button>
       </div>

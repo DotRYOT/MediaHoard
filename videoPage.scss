@@ -210,7 +210,64 @@ body {
     border: .1rem solid var(--border-color);
     background-color: var(--primary-bg);
 
+    .VideoSettings {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      -webkit-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      -webkit-align-content: stretch;
+      align-content: stretch;
+      -webkit-align-items: center;
+      align-items: center;
+
+      width: 100%;
+      gap: 1rem;
+
+      button {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        -webkit-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-align-content: stretch;
+        align-content: stretch;
+        -webkit-align-items: center;
+        align-items: center;
+
+        height: 2.5rem;
+        width: 2.5rem;
+        background-color: var(--button-bg);
+        border: .1rem solid var(--border-color);
+
+        ion-icon {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
     .deleteVideoContainer {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-align-content: stretch;
+      align-content: stretch;
+      -webkit-align-items: center;
+      align-items: center;
+
+      gap: 1rem;
+
       button {
         padding: .5rem 1rem;
         border-radius: .25rem;
@@ -220,4 +277,5 @@ body {
   }
 }
 
+@import "./scss/mediaVideo";
 @import "./scss/media";

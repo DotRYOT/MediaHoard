@@ -57,6 +57,12 @@ exec($command, $output, $returnVar);
 $title = getYoutubeVideoTitleScrape($video_id);
 $safeTitle = urlencode($title);
 
+if (!file_exists($outputFileName)) {
+  echo "Video did not download!";
+  $error = "Video did not download!";
+  handleError($error);
+}
+
 // Redirect to the download page with the sanitized title
 header('Location: ./_downloadedVideo.php/?url=' . $randNumber . '.' . $videoExtension . '&title=' . $safeTitle);
 exit();

@@ -79,6 +79,9 @@ $videoPath = $_GET['video_path'];
     <div class="container">
       <div class="VideoSettings">
         <h3>Video Settings</h3>
+        <button type="button" name="closeMenu" onclick="toggleSettingsTab()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
       </div>
       <div class="deleteVideoContainer">
         <p>
