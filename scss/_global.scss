@@ -12,8 +12,12 @@ $color-accent-dark: lighten($color-accent, 5%); // Or darken if preferred
   --placeholder-color: #7a7a7a; // Placeholder text color
 
   --border-color: #3d4143; // Border color
+  --border-color-transparent: #3d414333;// Border color transparent
   // --border-color: #ffffff; // Border color
   --hover-border-color: #505052; // Hover border color
+
+  --icon-color: #e0e0e0; // icon color
+  --icon-color-transparent: #e0e0e033; // icon color transparent
 
   --button-bg: #323234; // Button background
   --button-hover-bg: #404042; // Button hover background

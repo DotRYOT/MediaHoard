@@ -123,6 +123,10 @@ try {
         <p>Video Extension <span>Default: mp4</span></p>
         <input type="text" id="videoExtension" name="videoExtension" value="<?= $config['videoExtension'] ?>">
       </div>
+      <div class="settingsRowCheckBox">
+        <p>Open Media Tab <span>Default: false</span></p>
+        <input type="checkbox" id="openMediaTab" name="openMediaTab" value="true" <?= $config['openMediaTab'] === 'true' ? 'checked' : '' ?>>
+      </div>
       <button type="submit">Save</button>
     </form>
   </div>

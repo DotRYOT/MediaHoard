@@ -5,6 +5,8 @@ if (!is_dir("./imageFiles") || !file_exists("./imageFiles/images.json") || !file
   exit();
 }
 require_once '../scripts/_inc.php';
+$config = json_decode(file_get_contents('../config.json'), true);
+$openMediaTab = $config['openMediaTab'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +20,7 @@ require_once '../scripts/_inc.php';
   <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/zoomies.js"></script>
 </head>
 
-<body>
+<body id="imagesPage">
   <?php
   displayMessage();
   ?>
@@ -107,9 +109,10 @@ require_once '../scripts/_inc.php';
     function createPostCard(post) {
       const PUID = post.PUID;
       const image_path = post.image_path;
+      const target = '<?= $config['openMediaTab'] ?>' === 'true' ? '_blank' : '_self';
       return `
       <div class="image-card">
-        <a href="./imageFiles/_img.php?puid=${PUID}&filePath=${image_path}" class="image-link">
+        <a href="./imageFiles/_img.php?puid=${PUID}&filePath=${image_path}" target="${target}" class="image-link">
           <img src="..${image_path}" alt="thumbnail" loading="lazy" class="image-thumbnail">
         </a>
       </div>

@@ -11,7 +11,7 @@
 }
 
 @media (max-width: 760px) {
-  body {
+  #imagesPage {
     margin-top: 6.5rem;
   }
 
@@ -35,6 +35,14 @@
       margin-left: .5rem;
       height: auto;
     }
+  }
+  .pageFiltertab {
+    top: 6rem;
+    left: 0rem;
+    padding-top: .25rem;
+  border-bottom-left-radius: 0;
+  border-left: none;
+
   }
 }
 
