@@ -16,7 +16,7 @@ $videoPath = $_GET['video_path'];
   <link rel="stylesheet" href="../css/videoPage.min.css">
 </head>
 
-<body>
+<body id="videosPage">
   <nav>
     <div class="navLeft">
       <h3>MediaHoard <span><?= $version; ?></span></h3>

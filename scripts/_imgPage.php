@@ -18,21 +18,21 @@ $ImageFilePath = $_GET['filePath'];
     <div class="settingsMenuItem">
       <div class="settingsMenuContainer">
         <h3>Settings</h3>
-        <button class="deleteImageButton">
-          <ion-icon name="trash-outline"></ion-icon>
-          <p>Delete</p>
+        <button type="button" id="deleteAllImagesButtonFirst"
+          onclick="document.getElementById('deleteAllImagesButton').style.display = 'flex'; document.getElementById('deleteAllImagesButtonFirst').style.display = 'none';">
+          <ion-icon name="images-outline"></ion-icon>
+          <p>Delete All Images</p>
         </button>
-        <button class="deleteImageButton">
+        <button type="button" id="deleteAllImagesButton"
+          onclick="document.getElementById('deleteAllImagesButtonFinal').style.display = 'flex'; document.getElementById('deleteAllImagesButton').style.display = 'none';"
+          style="display: none;">
           <ion-icon name="trash-outline"></ion-icon>
-          <p>Delete</p>
+          <p>Are you sure?</p>
         </button>
-        <button class="deleteImageButton">
+        <button type="button" class="deleteAllImagesButtonFinal" id="deleteAllImagesButtonFinal" style="display: none;"
+          onclick="window.location.href='../../scripts/utility/_deleteImage.php?puid=<?= $PUID; ?>'">
           <ion-icon name="trash-outline"></ion-icon>
-          <p>Delete</p>
-        </button>
-        <button class="deleteImageButton">
-          <ion-icon name="trash-outline"></ion-icon>
-          <p>Delete</p>
+          <p>Delete Image</p>
         </button>
       </div>
     </div>

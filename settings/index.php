@@ -104,6 +104,38 @@ try {
     </div>
   </div>
 
+  <div class="topSettingsSection">
+    <div class="settingsUpdateSection">
+      <h3>Fix File Structure</h3>
+      <p class="version">Fixes the file structure</p>
+      <button type="button" onclick="window.location.href='../setup.php?update=true'">
+        <ion-icon name="file-tray-full-outline"></ion-icon>
+        <p>Fix File Structure</p>
+      </button>
+    </div>
+
+    <div class="settingsUpdateSection">
+      <h3>Delete All Images</h3>
+      <p class="version">Deletes all images</p>
+      <button type="button" id="deleteAllImagesButtonFirst"
+        onclick="document.getElementById('deleteAllImagesButton').style.display = 'flex'; document.getElementById('deleteAllImagesButtonFirst').style.display = 'none';">
+        <ion-icon name="images-outline"></ion-icon>
+        <p>Delete All Images</p>
+      </button>
+      <button type="button" id="deleteAllImagesButton"
+        onclick="document.getElementById('deleteAllImagesButtonFinal').style.display = 'flex'; document.getElementById('deleteAllImagesButton').style.display = 'none';"
+        style="display: none;">
+        <ion-icon name="trash-outline"></ion-icon>
+        <p>Are you sure?</p>
+      </button>
+      <button type="button" class="deleteAllImagesButtonFinal" id="deleteAllImagesButtonFinal" style="display: none;"
+        onclick="window.location.href='../scripts/utility/_deleteAllImages.php'">
+        <ion-icon name="trash-outline"></ion-icon>
+        <p>Delete All Images</p>
+      </button>
+    </div>
+  </div>
+
   <div class="VideoSettingsSection">
     <h3>Video Settings</h3>
     <form action="../scripts/utility/_videoSettings.php" method="post" class="settingsForm">
