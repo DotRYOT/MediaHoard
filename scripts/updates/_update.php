@@ -58,6 +58,10 @@ echo "<p class='success'>⚠️ New version available. Starting update...</p>";
 // Change working directory
 chdir($projectDir);
 
+if (!is_dir('.git')) {
+  die("<div class='error'>❌ Error: Not in a git repository. Please ensure this is a git repository.</div>");
+}
+
 function runCmd($cmd)
 {
   exec($cmd . ' 2>&1', $output, $returnCode);
@@ -68,8 +72,16 @@ function runCmd($cmd)
   return implode("\n", $output);
 }
 
-runCmd("git config --local user.email \"updater@localhost\"");
-runCmd("git config --local user.name \"Updater\"");
+runCmd("git config --global --add safe.directory \"$projectDir\"");
+
+$remoteCheck = shell_exec("git remote -v 2>&1");
+if (strpos($remoteCheck, 'origin') === false) {
+  echo "<p>Adding remote origin...</p>";
+  runCmd("git remote add origin $repoUrl");
+}
+
+runCmd("git config --global user.email \"updater@localhost\"");
+runCmd("git config --global user.name \"Updater\"");
 runCmd("git fetch origin");
 runCmd("git reset --hard origin/$branch");
 runCmd("git pull origin $branch");
