@@ -21,7 +21,7 @@ $ImageFilePath = $_GET['filePath'];
         <button type="button" id="deleteAllImagesButtonFirst"
           onclick="document.getElementById('deleteAllImagesButton').style.display = 'flex'; document.getElementById('deleteAllImagesButtonFirst').style.display = 'none';">
           <ion-icon name="images-outline"></ion-icon>
-          <p>Delete All Images</p>
+          <p>Delete Image</p>
         </button>
         <button type="button" id="deleteAllImagesButton"
           onclick="document.getElementById('deleteAllImagesButtonFinal').style.display = 'flex'; document.getElementById('deleteAllImagesButton').style.display = 'none';"
